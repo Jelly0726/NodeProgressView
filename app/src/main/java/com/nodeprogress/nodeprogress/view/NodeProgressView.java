@@ -89,47 +89,49 @@ public class NodeProgressView extends View {
     }
 
 
-    @Override
+   @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if (nodeProgressAdapter == null || nodeProgressAdapter.getCount() == 0)
             return;
         List data = nodeProgressAdapter.getData();
 
-//        canvas.translate(20,30);偏移位置，防止遮挡
-        canvas.drawRect(left, top, width + left, nodeProgressAdapter.getCount() * nodeInterval + top, paint);
+        //canvas.translate(20,30);//偏移位置，防止遮挡
+        canvas.drawRect(left+width-3, top, width + left+3, nodeProgressAdapter.getCount() * nodeInterval + top, paint);
         for (int i = 0; i < nodeProgressAdapter.getCount(); i++) {
-
             if (i == 0) {
                 Paint mPaint = new Paint();
                 mPaint.setAntiAlias(true);
                 mPaint.setColor(getResources().getColor(R.color.nodeTextColor));
                 //画文字
                 mPaint.setTextSize(30);
-                canvas.drawText(((LogisticsData)data.get(i)).getTime()+"", left * 2 + nodeRadius * 2 + 10, (i + 1) * nodeInterval + top - 20, mPaint);
+                canvas.drawText(((LogisticsData)data.get(i)).getTime()+"",
+                        left * 2 + nodeRadius * 2 + 10, (i + 1) * nodeInterval + top - 20, mPaint);
 //                canvas.drawText("不换行", left * 2 + nodeRadius * 2 + 10, i * nodeInterval + top + (nodeInterval / 3), mPaint);
                 //文字换行
                 TextPaint textPaint = new TextPaint();
                 textPaint.setColor(getResources().getColor(R.color.nodeTextColor));
                 textPaint.setTextSize(35.0F);
                 textPaint.setAntiAlias(true);
-                StaticLayout layout = new StaticLayout(((LogisticsData)data.get(i)).getContext()+"", textPaint, (int) (dWidth * 0.8), Layout.Alignment.ALIGN_NORMAL, 1.0F, 0.0F, true);
+                //文字宽高
+                StaticLayout layout = new StaticLayout(((LogisticsData)data.get(i)).getContext()+"",
+                        textPaint, (int) (getWidth()-(left * 2 + nodeRadius * 2 + 10)), Layout.Alignment.ALIGN_NORMAL, 1.0F, 0.0F, true);
                 canvas.save();
                 canvas.translate(left * 2 + nodeRadius * 2 + 10, i * nodeInterval + top + (nodeInterval / 4));
                 layout.draw(canvas);
                 canvas.restore();//重置
 
                 //画圆
-                canvas.drawCircle(width / 2 + left, i * nodeInterval + top, nodeRadius + 2, mPaint);
+                canvas.drawCircle(width / 1 + left, i * nodeInterval + top, nodeRadius + 2, mPaint);
                 mPaint.setStyle(Paint.Style.STROKE);//设置为空心
                 mPaint.setStrokeWidth(8);//空心宽度
                 mPaint.setAlpha(88);
-                canvas.drawCircle(width / 2 + left, i * nodeInterval + top, nodeRadius + 4, mPaint);
+                canvas.drawCircle(width / 1 + left, i * nodeInterval + top, nodeRadius + 4, mPaint);
 
 
             } else {
                 paint.setColor(getResources().getColor(R.color.nodeColor));
-                canvas.drawCircle(width / 2 + left, i * nodeInterval + top, nodeRadius, paint);
+                canvas.drawCircle(width / 1 + left, i * nodeInterval + top, nodeRadius, paint);
                 canvas.drawLine(left * 2 + nodeRadius * 2, i * nodeInterval + top, dWidth, i * nodeInterval + top, paint); //画线
 
 
@@ -141,7 +143,9 @@ public class NodeProgressView extends View {
                 textPaint.setColor(getResources().getColor(R.color.nodeColor));
                 textPaint.setTextSize(35.0F);
                 textPaint.setAntiAlias(true);
-                StaticLayout layout = new StaticLayout(((LogisticsData)data.get(i)).getContext()+"", textPaint, (int) (dWidth * 0.8), Layout.Alignment.ALIGN_NORMAL, 1.0F, 0.0F, true);
+                //文字宽高
+                StaticLayout layout = new StaticLayout(((LogisticsData)data.get(i)).getContext()+"",
+                        textPaint,(int) (getWidth()-(left * 2 + nodeRadius * 2 + 10)), Layout.Alignment.ALIGN_NORMAL, 1.0F, 0.0F, true);
                 canvas.save();//很重要，不然会样式出错
                 canvas.translate(left * 2 + nodeRadius * 2 + 10, i * nodeInterval + top + (nodeInterval / 4));
                 layout.draw(canvas);
@@ -150,6 +154,7 @@ public class NodeProgressView extends View {
 
         }
     }
+
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
